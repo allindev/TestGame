@@ -20,8 +20,6 @@ namespace KLWStateMachine
         }
     }
 
-
-
     public enum FSMActionName
     {
         Enter,

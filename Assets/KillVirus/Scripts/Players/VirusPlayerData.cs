@@ -22,15 +22,15 @@ public class VirusPlayerData
 
     public VirusPlayerData()
     {
-        ShootNum = 1;
-        ShootPower = 2;
+        ShootNum = 8;
+        ShootPower = 4;
         IsShootCoin = false;
         IsRepulse = false;
 
         IsPower = false;
 
-        WeaponLevel = 1;
-        ShootSpeed = 1;
+        WeaponLevel = 5;
+        ShootSpeed = 3;
     }
 
 }

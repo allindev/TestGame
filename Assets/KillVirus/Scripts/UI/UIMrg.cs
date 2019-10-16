@@ -10,6 +10,7 @@ namespace UI
         [SerializeField] private UISettlePanel settlePanel;
         [SerializeField] private UICoinPanel coinPanel;
         [SerializeField] private UIRestartPanel restartPanel;
+        [SerializeField] private UIUpgradePanel upgradePanel;
 
 
         public UIMainPanel MainPanel { get { return mainPanel; } }
@@ -21,6 +22,7 @@ namespace UI
         public UICoinPanel CoinPanel { get { return coinPanel; } }
 
         public UIRestartPanel RestartPanel { get { return restartPanel; } }
+        public UIUpgradePanel UpgradePanel { get { return upgradePanel; } }
 
 
         public void FadeIn()

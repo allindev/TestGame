@@ -3,8 +3,9 @@
 --- !u!128 &12800000
 Font:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: 00(Font)
   serializedVersion: 5
   m_LineSpacing: 43
@@ -76,7 +77,7 @@ Font:
     vert:
       serializedVersion: 2
       x: -0
-      y: 43
+      y: 42.999996
       width: 43
       height: -43
     advance: 43
@@ -92,7 +93,7 @@ Font:
     vert:
       serializedVersion: 2
       x: -0
-      y: 43
+      y: 42.999996
       width: 42
       height: -43
     advance: 42
@@ -124,7 +125,7 @@ Font:
     vert:
       serializedVersion: 2
       x: -0
-      y: 41.999996
+      y: 41.999992
       width: 41
       height: -42
     advance: 41
@@ -140,7 +141,7 @@ Font:
     vert:
       serializedVersion: 2
       x: -0
-      y: 42
+      y: 41.999996
       width: 42
       height: -42
     advance: 42
@@ -156,7 +157,7 @@ Font:
     vert:
       serializedVersion: 2
       x: -0
-      y: 42
+      y: 41.999996
       width: 42
       height: -42
     advance: 42
@@ -172,7 +173,7 @@ Font:
     vert:
       serializedVersion: 2
       x: -0
-      y: 43
+      y: 42.999996
       width: 42
       height: -43
     advance: 42
@@ -315,3 +316,4 @@ Font:
   m_FallbackFonts: []
   m_FontRenderingMode: 0
   m_UseLegacyBoundsCalculation: 0
+  m_ShouldRoundAdvanceValue: 1
