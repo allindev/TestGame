@@ -118,10 +118,11 @@ public class VirusPlayer : MonoBehaviour
 
     public void InitiViceWeapon(int index)
     {
-        if (index >= _weaponList.Count)
-            return;
+        if (index >= _weaponList.Count) return;
+        
         if (index >= 0)
         {
+            
             var weapon = _weaponList[index];
             if (weapon != null)
             {

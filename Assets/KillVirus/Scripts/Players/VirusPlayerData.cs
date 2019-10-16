@@ -1,37 +1,49 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 
+
+[System. Serializable]
 public class VirusPlayerData
 {
 
-    public int WeaponLevel { set; get; }
+    
+    public int ShootNum;
+    public int ShootPower;
+    public int ShootSpeed;
+    public int ShootLevel;
 
-    public int ShootNum { set; get; }
+    public bool IsShootCoin;
+    public bool IsRepulse;
+    public bool IsPower;
+    
+    public int WeaponLevel;
+    public List<WeaponData> Weapons;
 
-    public int ShootPower { set; get; }
+    [System. Serializable]
+    public class WeaponData
+    {
+        public int id;
+        public int level;
+        public int fire;
+        public int speed;
+        public bool unLock;
 
-    public int ShootSpeed { set; get; }
-   
-
-
-    public bool IsShootCoin { set; get; }
-
-    public bool IsRepulse { set; get; }
-
-    public bool IsPower { set; get; }
-
-
+    }
     public VirusPlayerData()
     {
         ShootNum = 8;
+        ShootLevel = 1;
         ShootPower = 4;
         IsShootCoin = false;
         IsRepulse = false;
-
         IsPower = false;
-
         WeaponLevel = 5;
         ShootSpeed = 3;
+        
     }
+
+  
 
 }
 
@@ -48,7 +60,7 @@ public class VirusPlayerDataAdapter
         _upgradeNum = new List<int> { 5, 8, 6, 7, 10, 15, 20 };
     }
 
-
+   
     public static bool UpgradeShoot()
     {
         _curNum++;
@@ -68,6 +80,11 @@ public class VirusPlayerDataAdapter
     public static void AddWeaponLevel()
     {
         _virusPlayerData.WeaponLevel++;
+    }
+
+    public static void AddShootLevel()
+    {
+        _virusPlayerData.ShootLevel++;
     }
 
     public static void AddShootPower(int value)

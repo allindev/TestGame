@@ -1,4 +1,4 @@
-﻿
+﻿[System. Serializable]
 public class VirusGameData
 {
     public int TotalCoin;

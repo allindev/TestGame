@@ -51,10 +51,13 @@ namespace UI
             {
                 ShowPanel(UpgradePanelEnum.Main);
             });
+
             btnWeapon.onClick.AddListener(() =>
             {
                 ShowPanel(UpgradePanelEnum.Weapon);
             });
+
+
         }
 
         
@@ -64,15 +67,26 @@ namespace UI
             {
                 case UpgradePanelEnum.Main:
                     mainPanel.SetActive(true);
+                    FillMainPanelUIInfo();
                     weaponPanel.SetActive(false);
                     break;
                 case UpgradePanelEnum.Weapon:
                     weaponPanel.SetActive(true);
+                    FillWeaponPanelUIInfo();
                     mainPanel.SetActive(false);
                     break;
             }
         }
 
+
+        private void FillMainPanelUIInfo(){
+            textMainFireLv.text = $"[Lv{1}]";
+
+        }
+
+        private void FillWeaponPanelUIInfo(){
+            
+        }
 
         public override void Active()
         {

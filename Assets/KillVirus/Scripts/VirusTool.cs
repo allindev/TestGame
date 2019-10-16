@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Assets.Scripts.Tool;
 using UnityEngine;
 
@@ -14,6 +15,46 @@ public static class VirusTool
     private static List<string> _propNames; 
    
 
+
+    public static void SavePlayerData(VirusPlayerData playerData)
+    {
+        SaveData<VirusPlayerData>(playerData, "player.json");
+    }
+
+    public static VirusPlayerData LoadPlayerData()
+    {
+        return LoadData<VirusPlayerData>("player.json");
+    }
+
+     public static void SaveGameData(VirusGameData gameData)
+    {
+        SaveData<VirusGameData>(gameData, "game.json");
+    }
+
+    public static VirusGameData LoadGameData()
+    {
+        return LoadData<VirusGameData>("game.json");
+    }
+
+    public static void SaveData<T>(T data, string jsonName)
+    {
+        string path = $"{Application.persistentDataPath}/{jsonName}";
+        var content = JsonUtility.ToJson(data,true);
+        File.WriteAllText(path,content);
+    }
+
+    public static T LoadData<T>(string jsonName)
+    {
+        string path = $"{Application.persistentDataPath}/{jsonName}";
+        if(File.Exists(path)){
+            var content = File.ReadAllText(path);
+            var playerData = JsonUtility.FromJson<T>(content);
+            return playerData;
+        }else{
+            Debug.LogError("Save file not found in  "+path);
+            return default(T);
+        }
+    }
 
 
     public static float GetScaleByLevel(SplitLevel splitLevel)
