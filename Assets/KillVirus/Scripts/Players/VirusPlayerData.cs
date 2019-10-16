@@ -6,8 +6,6 @@ using UnityEngine;
 [System. Serializable]
 public class VirusPlayerData
 {
-
-    
     public int ShootNum;
     public int ShootPower;
     public int ShootSpeed;
@@ -18,6 +16,7 @@ public class VirusPlayerData
     public bool IsPower;
     
     public int WeaponLevel;
+    public int CurUseWeaponLevel;
     public List<WeaponData> Weapons;
 
     [System. Serializable]
@@ -28,7 +27,6 @@ public class VirusPlayerData
         public int fire;
         public int speed;
         public bool unLock;
-
     }
     public VirusPlayerData()
     {
@@ -39,8 +37,21 @@ public class VirusPlayerData
         IsRepulse = false;
         IsPower = false;
         WeaponLevel = 5;
+        CurUseWeaponLevel = WeaponLevel;
         ShootSpeed = 3;
-        
+        var weapons = new List<WeaponData>();
+        for (int i = 0; i < 7; i++)
+        {
+            var weapon = new WeaponData(){
+                id = i,
+                level = i+1,
+                fire = 1,
+                speed = 1,
+                unLock = false,
+            };
+            weapons.Add(weapon);
+        }
+        Weapons = weapons;
     }
 
   
@@ -76,10 +87,30 @@ public class VirusPlayerDataAdapter
         return false;
     }
 
+    public static int GetCurWeaponLevel()
+    {
+        return _virusPlayerData.CurUseWeaponLevel;
+    }
+
+    public static VirusPlayerData.WeaponData GetWeaponData(int level)
+    {
+        return _virusPlayerData.Weapons.Find(s=>s.level == level);
+    }
+
+
+    public static void SetCurWeaponLevel(int level)
+    {
+        _virusPlayerData.CurUseWeaponLevel = level;
+    }
 
     public static void AddWeaponLevel()
     {
         _virusPlayerData.WeaponLevel++;
+    }
+
+    public static int GetShootLevel()
+    {
+        return _virusPlayerData.ShootLevel;
     }
 
     public static void AddShootLevel()
@@ -90,6 +121,11 @@ public class VirusPlayerDataAdapter
     public static void AddShootPower(int value)
     {
         _virusPlayerData.ShootPower += value;
+    }
+
+    public static int GetShootSpeed()
+    {
+        return _virusPlayerData.ShootSpeed;
     }
 
     public static void AddShootSpeed()

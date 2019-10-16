@@ -119,10 +119,10 @@ public class VirusPlayer : MonoBehaviour
     public void InitiViceWeapon(int index)
     {
         if (index >= _weaponList.Count) return;
-        
+
         if (index >= 0)
         {
-            
+            var preIndex = VirusPlayerDataAdapter.GetCurWeaponLevel();
             var weapon = _weaponList[index];
             if (weapon != null)
             {
@@ -139,7 +139,7 @@ public class VirusPlayer : MonoBehaviour
                 Sequence sq = DOTween.Sequence();
                 sq.AppendCallback(() =>
                 {
-                    _weaponList[index - 1].GetComponent<ViceWeaponEffect>().FadeIn();
+                    _weaponList[preIndex].GetComponent<ViceWeaponEffect>().FadeIn();
                 });
                 sq.AppendInterval(1.0f);
                 sq.AppendCallback(() =>
@@ -148,8 +148,10 @@ public class VirusPlayer : MonoBehaviour
                     VirusSoundMrg.Instance.PlaySound(VirusSoundType.Unlock);
                 });
                 sq.AppendInterval(1.0f);
-                sq.AppendCallback(() => { _weaponList[index - 1].SetActive(false); });
+                sq.AppendCallback(() => { _weaponList[preIndex].SetActive(false); });
             }
+
+            VirusPlayerDataAdapter.SetCurWeaponLevel(index);
         }
     }
 

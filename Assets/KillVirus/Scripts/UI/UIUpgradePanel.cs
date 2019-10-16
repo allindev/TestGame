@@ -47,19 +47,62 @@ namespace UI
         private bool _isActive;
         private void Awake()
         {
-            btnMain.onClick.AddListener(() =>
-            {
-                ShowPanel(UpgradePanelEnum.Main);
-            });
+            btnMain.onClick.AddListener(() => { ShowPanel(UpgradePanelEnum.Main); });
+            btnWeapon.onClick.AddListener(() => { ShowPanel(UpgradePanelEnum.Weapon); });
+            btnMainFire.onClick.AddListener(OnClickUpgradeMainFire);
+            btnMainSpeed.onClick.AddListener(OnClickUpgradeMainSpeed);
+            btnWeaponFire.onClick.AddListener(OnClickUpgradeWeaponFire);
+            btnWeaponSpeed.onClick.AddListener(OnClickUpgradeWeaponSpeed);
+        }
 
-            btnWeapon.onClick.AddListener(() =>
-            {
-                ShowPanel(UpgradePanelEnum.Weapon);
-            });
+        private void OnClickUpgradeWeaponFire()
+        {
+            RefreshWeaponPanelUIInfo();
+        }
 
+        private void OnClickUpgradeWeaponSpeed()
+        {
+            UpgradeMainSpeed();
+            RefreshWeaponPanelUIInfo();
+        }
+
+        private void OnClickUpgradeMainFire()
+        {
+            UpgradeMainFire();
+            RefreshMainPanelUIInfo();
 
         }
 
+        private void OnClickUpgradeMainSpeed()
+        {
+            RefreshMainPanelUIInfo();
+            
+        }
+
+        private void UpgradeMainFire()
+        {
+            int needCoin = VirusTool.GetUpgradeCoin(VirusPlayerDataAdapter.GetShootLevel());
+            VirusGameDataAdapter.MinusTotalCoin(needCoin);
+            VirusPlayerDataAdapter.AddShootPower(1);
+        }
+
+         private void UpgradeMainSpeed()
+         {
+             int needCoin = VirusTool.GetUpgradeCoin(VirusPlayerDataAdapter.GetShootSpeed());
+             VirusGameDataAdapter.MinusTotalCoin(needCoin);
+             VirusPlayerDataAdapter.AddShootSpeed();
+
+        }
+
+        private void UpgradeWeaponFire(int needCoin)
+        {
+            VirusGameDataAdapter.MinusTotalCoin(needCoin);
+
+        }
+        private void UpgradeWeaponSpeed(int needCoin)
+        {
+            VirusGameDataAdapter.MinusTotalCoin(needCoin);
+        }
         
         private void ShowPanel(UpgradePanelEnum upgradePanelEnum)
         {
@@ -67,27 +110,58 @@ namespace UI
             {
                 case UpgradePanelEnum.Main:
                     mainPanel.SetActive(true);
-                    FillMainPanelUIInfo();
                     weaponPanel.SetActive(false);
+                    RefreshMainPanelUIInfo();
                     break;
                 case UpgradePanelEnum.Weapon:
                     weaponPanel.SetActive(true);
-                    FillWeaponPanelUIInfo();
                     mainPanel.SetActive(false);
+                    RefreshWeaponPanelUIInfo();
                     break;
             }
         }
 
 
-        private void FillMainPanelUIInfo(){
-            textMainFireLv.text = $"[Lv{1}]";
+        private void RefreshMainPanelUIInfo(){
+            int fireNeedCoin = VirusTool.GetUpgradeCoin(VirusPlayerDataAdapter.GetShootLevel());
+            int speedNeedCoin = VirusTool.GetUpgradeCoin(VirusPlayerDataAdapter.GetShootSpeed());
+           
+            textMainFireLv.text = $"[Lv{VirusPlayerDataAdapter.GetShootLevel()}]";
+            textMainFireValue.text = $"{VirusPlayerDataAdapter.GetShootLevel()*10}";
+            textMainFireCoin.text = $"x{fireNeedCoin}";
 
-        }
-
-        private void FillWeaponPanelUIInfo(){
+            textMainSpeedLv.text = $"[Lv{VirusPlayerDataAdapter.GetShootSpeed()}]";
+            textMainSpeedValue.text = $"{VirusPlayerDataAdapter.GetShootSpeed()*10}";
+            textMainSpeedCoin.text = $"x{speedNeedCoin}";
             
+            btnMainFire.interactable = CheckCoin(fireNeedCoin);
+            btnMainSpeed.interactable = CheckCoin(speedNeedCoin);
         }
 
+
+        private void RefreshWeaponPanelUIInfo(){
+            var lv = VirusPlayerDataAdapter.GetCurWeaponLevel();
+            var weapon = VirusPlayerDataAdapter.GetWeaponData(lv);
+
+            int fireNeedCoin = VirusTool.GetUpgradeCoin(weapon.fire);
+            int speedNeedCoin = VirusTool.GetUpgradeCoin(weapon.speed);
+           
+            textWeaponFireLv.text = $"[Lv{weapon.fire}]";
+            textWeaponFireValue.text = $"{weapon.fire*10}";
+            textWeaponFireCoin.text = $"x{fireNeedCoin}";
+
+            textWeaponSpeedLv.text = $"[Lv{weapon.speed}]";
+            textWeaponSpeedValue.text = $"{weapon.speed*10}";
+            textWeaponSpeedCoin.text = $"x{speedNeedCoin}";
+            
+            btnWeaponFire.interactable = CheckCoin(fireNeedCoin);
+            btnWeaponSpeed.interactable = CheckCoin(speedNeedCoin);
+        }
+
+        private bool CheckCoin(int needCoin){
+            int coin = VirusGameDataAdapter.GetTotalCoin();
+            return coin >= needCoin;
+        }
         public override void Active()
         {
            
