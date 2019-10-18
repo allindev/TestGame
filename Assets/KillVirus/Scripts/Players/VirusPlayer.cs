@@ -54,7 +54,7 @@ public class VirusPlayer : MonoBehaviour
         {
             t.SetActive(false);
         }
-        InitiViceWeapon(4);
+        InitiViceWeapon(0);
         _forceViruses = new List<BaseVirus>();
     }
 

@@ -23,6 +23,7 @@ public class VirusPlayerMove : MonoBehaviour, IEventListener<FirstByteClick1Down
     private bool _isDown;
     private bool _isSlowDown;
     private bool _isTouchOn;
+    private bool _isGamePlayTouchOn;
     private float _multiplier;
 
 
@@ -52,6 +53,9 @@ public class VirusPlayerMove : MonoBehaviour, IEventListener<FirstByteClick1Down
             MultiplierUpdate();
 
             TouchMoveUpdate();
+        }else
+        {
+            ClickPlayer();
         }
     }
 
@@ -204,10 +208,6 @@ public class VirusPlayerMove : MonoBehaviour, IEventListener<FirstByteClick1Down
         }
         if (Input.GetMouseButtonUp(0))
         {
-            if (_isTouchOn)
-            {
-                ClickPlayer();
-            }
             _isTouchOn = false;
         }
         if (Input.GetMouseButton(0))
@@ -231,7 +231,30 @@ public class VirusPlayerMove : MonoBehaviour, IEventListener<FirstByteClick1Down
 
     private void ClickPlayer()
     {
-        EventManager.TriggerEvent(new FirstByteClick5DownEvent());
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Collider2D col = Physics2D.OverlapPoint(pos, 1 << LayerMask.NameToLayer("Player"));
+            if (col != null)
+            {
+                _isGamePlayTouchOn = true;
+            }
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (_isGamePlayTouchOn)
+            {
+                EventManager.TriggerEvent(new FirstByteClick5DownEvent());
+            }
+            _isGamePlayTouchOn = false;
+        }
+
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            EventManager.TriggerEvent(new FirstByteClick5DownEvent());
+        }
+        
     }
     public void Decelerate()
     {

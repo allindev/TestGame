@@ -161,7 +161,9 @@ public class VirusGameMrg : Singleton<VirusGameMrg>, IEventListener<VirusGameSta
     [FSM("GamePlay", FSMActionName.Enter)]
     private void OnPlayEnter()
     {
-        Debug.LogError("Level:" + VirusGameDataAdapter.GetLevel());
+        Debug.Log("Level:" + VirusGameDataAdapter.GetLevel());
+        _uiMrg.TitlePanel.UnActive();
+        _uiMrg.UpgradePanel.UnActive();
         _uiMrg.MainPanel.Active();
         _virusPlayer.Invincible = false;
         _virusPlayer.SetPlayerState(true, true);
