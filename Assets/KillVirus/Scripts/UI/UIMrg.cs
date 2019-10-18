@@ -28,6 +28,7 @@ namespace UI
         public void FadeIn()
         {
             titlePanel.Active();
+            UpgradePanel.Active();
         }
 
 

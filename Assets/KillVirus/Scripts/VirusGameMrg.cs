@@ -79,15 +79,30 @@ public class VirusGameMrg : Singleton<VirusGameMrg>, IEventListener<VirusGameSta
         {
             _fsm.ChangeState(VirusGameState.Settle);
         }
+        
         if (eventType.GameState == VirusGameState.GameOver)
         {
             _fsm.ChangeState(VirusGameState.GameOver);
+        }
+         if (eventType.GameState == VirusGameState.UpgradeShoot)
+        {
+            _fsm.ChangeState(VirusGameState.UpgradeShoot);
+        }
+        if (eventType.GameState == VirusGameState.UpgradeWeapon)
+        {
+            _fsm.ChangeState(VirusGameState.UpgradeWeapon);
         }
     }
 
     public void OnEvent(FirstByteClick5DownEvent eventType)
     {
         _isClickSpace = true;
+        
+        if (_fsm.State == VirusGameState.ShowTitle)
+        {
+            _fsm.ChangeState(VirusGameState.GamePlay);
+        }
+
     }
     
 
@@ -116,73 +131,30 @@ public class VirusGameMrg : Singleton<VirusGameMrg>, IEventListener<VirusGameSta
         _virusPlayer.transform.position = new Vector3(0, -15f, 0);
         sq.Append(VirusPlayer.transform.DOLocalMoveY(-5f, 0.6f));
         sq.AppendInterval(1.0f);
-        sq.AppendCallback(() => { _fsm.ChangeState(VirusGameState.Upgrade); });
         _firstIn = false;
         _isGetAward = false;
     }
 
 
-    [FSM("Upgrade", FSMActionName.Enter)]
-    private void OnUpgradeEnter()
+    [FSM("UpgradeShoot", FSMActionName.Enter)]
+    private void OnUpgradeShootEnter()
     {
-        bool isUpdgrade = false;
-        int coin = VirusGameDataAdapter.GetTotalCoin();
-        int needCoin = VirusTool.GetUpgradeCoin(VirusPlayerDataAdapter.GetWeaponLevel());
-        while (true)
-        {
-            if (coin >= needCoin)
-            {
-                isUpdgrade = true;
-                int value = VirusPlayerDataAdapter.GetUpgradeValue();
-                VirusGameDataAdapter.MinusTotalCoin(needCoin);
-                VirusPlayerDataAdapter.AddWeaponLevel();
-                VirusPlayerDataAdapter.AddShootPower(value);
-                VirusPlayerDataAdapter.AddShootSpeed();
+        string tipStr = "火力升级"; 
+        _uiMrg.CoinPanel.SetCoinText();
+        _virusPlayer.Upgrade();
+        VirusSoundMrg.Instance.PlaySound(VirusSoundType.UpgradeGun);
+        var tip = EffectPools.Instance.Spawn("FloatTip");
+        tip.transform.position = _virusPlayer.transform.position;
+        tip.transform.localScale = new Vector3(1.5f, 1.5f, 1);
+        tip.GetComponent<FastlaneFloatTip>().Float(tipStr, () => { EffectPools.Instance.DeSpawn(tip); });
+    }
 
-                bool b1 = VirusPlayerDataAdapter.GetShootNum() <= 8;
-                bool b2 = VirusPlayerDataAdapter.UpgradeShoot();
-                if (b1 && b2)
-                {
-                    VirusPlayerDataAdapter.AddShootNum(1);
-                }
-
-                coin = VirusGameDataAdapter.GetTotalCoin();
-                needCoin = VirusTool.GetUpgradeCoin(VirusPlayerDataAdapter.GetWeaponLevel());
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        string tipStr = ""; 
-        if (isUpdgrade)
-        {
-            _uiMrg.CoinPanel.SetCoinText();
-            _virusPlayer.Upgrade();
-            VirusSoundMrg.Instance.PlaySound(VirusSoundType.UpgradeGun);
-            tipStr = "火力升级";
-        }
-        float delayTime = 2f;
-        int level = VirusTool.UnlockViceWeapon(VirusGameDataAdapter.GetLevel());
-        if (level > 0)
-        {
-            delayTime = 5f;
-            _virusPlayer.InitiViceWeapon(level);
-            tipStr = "装备升级";
-        }
-        if (!string.IsNullOrEmpty(tipStr))
-        {
-            var tip = EffectPools.Instance.Spawn("FloatTip");
-            tip.transform.position = _virusPlayer.transform.position;
-            tip.transform.localScale = new Vector3(1.5f, 1.5f, 1);
-            tip.GetComponent<FastlaneFloatTip>().Float(tipStr, () => { EffectPools.Instance.DeSpawn(tip); });
-        }
-
-        DOVirtual.DelayedCall(delayTime, _uiMrg.FadeOut).OnComplete(() =>
-        {
-            _fsm.ChangeState(VirusGameState.GamePlay);
-        });
+    [FSM("UpgradeWeapon", FSMActionName.Enter)]
+    private void OnUpgradeWeaponEnter()
+    {
+        int level = VirusPlayerDataAdapter.GetCurWeaponLevel();
+        _virusPlayer.InitiViceWeapon(level);
+        VirusSoundMrg.Instance.PlaySound(VirusSoundType.UpgradeGun);
     }
 
 

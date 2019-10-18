@@ -1,4 +1,5 @@
-﻿using Tool;
+﻿using Events;
+using Tool;
 using UnityEngine;
 
 public class VirusPlayerMove : MonoBehaviour, IEventListener<FirstByteClick1DownEvent>,
@@ -118,6 +119,11 @@ public class VirusPlayerMove : MonoBehaviour, IEventListener<FirstByteClick1Down
             EventManager.TriggerEvent(new FirstByteClick4UpEvent());
         }
 
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            EventManager.TriggerEvent(new FirstByteClick5DownEvent());
+        }
+
     }
 
     private void MoveUpdate()
@@ -198,6 +204,10 @@ public class VirusPlayerMove : MonoBehaviour, IEventListener<FirstByteClick1Down
         }
         if (Input.GetMouseButtonUp(0))
         {
+            if (_isTouchOn)
+            {
+                ClickPlayer();
+            }
             _isTouchOn = false;
         }
         if (Input.GetMouseButton(0))
@@ -219,7 +229,10 @@ public class VirusPlayerMove : MonoBehaviour, IEventListener<FirstByteClick1Down
     }
 
 
-
+    private void ClickPlayer()
+    {
+        EventManager.TriggerEvent(new FirstByteClick5DownEvent());
+    }
     public void Decelerate()
     {
         _isSlowDown = true;

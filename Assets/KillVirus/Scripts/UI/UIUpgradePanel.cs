@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using DG.Tweening;
+using Events;
 using Tool;
 using UnityEngine;
 using UnityEngine.UI;
@@ -62,21 +63,23 @@ namespace UI
 
         private void OnClickUpgradeWeaponSpeed()
         {
-            UpgradeMainSpeed();
+           
             RefreshWeaponPanelUIInfo();
+            
         }
 
         private void OnClickUpgradeMainFire()
         {
             UpgradeMainFire();
             RefreshMainPanelUIInfo();
-
+            EventManager.TriggerEvent(new VirusGameStateEvent(VirusGameState.UpgradeShoot));
         }
 
         private void OnClickUpgradeMainSpeed()
         {
+            UpgradeMainSpeed();
             RefreshMainPanelUIInfo();
-            
+            EventManager.TriggerEvent(new VirusGameStateEvent(VirusGameState.UpgradeShoot));
         }
 
         private void UpgradeMainFire()
@@ -164,12 +167,13 @@ namespace UI
         }
         public override void Active()
         {
-           
+           gameObject.SetActive(true);
         }
 
         public override void UnActive()
         {
             _isActive = false;
+            gameObject.SetActive(false);
             // _resultBg.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBounce).OnComplete(() =>
             // {
             //     gameObject.SetActive(false);
